@@ -55,3 +55,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🧬 Synapse API v3 running on port ${PORT} [${process.env.NODE_ENV}]`);
 });
+module.exports = app;
