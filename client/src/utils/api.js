@@ -1,10 +1,11 @@
-// FILE: client/src/utils/api.js
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 15000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 // Auto-inject JWT token on every request
@@ -12,14 +13,14 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('synapse_token');
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Handle 401s globally — redirect to login
+// Handle 401s globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
