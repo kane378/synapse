@@ -6,11 +6,15 @@ const { helmetConfig, globalLimiter, auditLogger } = require('./middleware/secur
 
 const app = express();
 
+// 💡 ADD THIS LINE RIGHT HERE BEFORE HELMET AND LIMITERS
+app.set('trust proxy', 1); 
+
 app.use(helmetConfig);
 
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(o => o.trim());
 app.use(cors({
   origin: (origin, callback) => {
+    // If it's a server-to-server request or matching allowed origins
     if (!origin || allowedOrigins.includes(origin)) callback(null, true);
     else callback(new Error('Not allowed by CORS'));
   },
@@ -24,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(globalLimiter);
 app.use(auditLogger);
 
+// ... The rest of your routes and error handling remain exactly the same
 // Routes
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/inventory',     require('./routes/inventory'));
