@@ -16,7 +16,12 @@
       "dest": "server/index.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "client/static/$1"
+    },
+    {
+      "src": "/(.*).(json|ico|png|js|css)",
+      "dest": "client/$1.$2"
     },
     {
       "src": "/(.*)",
